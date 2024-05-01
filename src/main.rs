@@ -2,12 +2,7 @@ use clap::Parser;
 use enum_iterator::all;
 use palette::LinSrgb;
 
-mod app;
-mod rg35xx;
-mod sim;
-mod snake;
-
-use crate::app::{App, Buttons, Frame, Input};
+use rg35xx::app::{App, Buttons, Frame, Input};
 
 struct InputTestApp;
 
@@ -35,10 +30,10 @@ fn main() {
     let args = Args::parse();
 
     //let mut app = InputTestApp;
-    let app = crate::snake::SnakeApp::default();
+    let app = rg35xx::snake::SnakeApp::default();
     if args.sim {
-        crate::sim::run_app(app);
+        rg35xx::sim::run_app(app);
     } else {
-        crate::rg35xx::run_app(app);
+        rg35xx::rg35xx::run_app(app);
     }
 }
