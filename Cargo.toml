@@ -1,0 +1,22 @@
+[package]
+name = "rg35xx"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+softbuffer = "0.4.2"
+winit = "0.30.0"
+framebuffer = { git = "https://github.com/lkolbly/rust-framebuffer.git", rev = "635e354d2d36d6ed2b6eff2a7c1e0bf073eca008" }
+stick = { git = "https://github.com/lkolbly/stick.git", rev = "75402a2d9ea6ff31a44eb984b4100201a65545ed" }
+pasts = "0.8"
+palette = "0.7.6"
+image = "0.25.1"
+enum-iterator = "2.0.1"
+enum-map = "2.7.3"
+include_dir = "0.7.3"
+ttf-parser = "0.20.0"
+rusttype = "0.9.3"
+rand = "0.8.5"
+clap = { version = "4.5.3", features = ["derive"] }

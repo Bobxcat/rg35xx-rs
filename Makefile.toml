@@ -1,0 +1,24 @@
+[tasks.build-release]
+command = "cargo"
+args = ["build", "--target", "armv7-unknown-linux-musleabihf", "--release"]
+
+[tasks.deploy]
+command = "adb"
+args = [
+    "push",
+    "./target/armv7-unknown-linux-musleabihf/release/rg35xx",
+    "/mnt/mmc/Roms/APPS/lane/",
+]
+dependencies = ["build-release"]
+
+[tasks.deploy-sh]
+command = "adb"
+args = ["push", "./demo.sh", "/mnt/mmc/Roms/APPS/"]
+
+[tasks.log]
+command = "adb"
+args = ["shell", "cat", "/mnt/mmc/Roms/APPS/lane/log.txt"]
+
+[tasks.sim]
+command = "cargo"
+args = ["run", "--", "--sim"]
