@@ -8,7 +8,7 @@ use pasts::Loop;
 use std::task::Poll::{self, Pending};
 use stick::{Controller, Event, Listener};
 
-use crate::app::{App, Buttons, Frame, Input};
+use crate::app::{App, Button, Frame, Input};
 
 type Exit = usize;
 
@@ -118,18 +118,18 @@ pub fn run_app(mut app: impl App) {
                 }
             }
             if let Some((button, value)) = match event {
-                Event::BumperL(v) => Some((Buttons::BumperL, v)),
-                Event::BumperR(v) => Some((Buttons::BumperR, v)),
-                Event::PovDown(v) => Some((Buttons::PovDown, v)),
-                Event::PovUp(v) => Some((Buttons::PovUp, v)),
-                Event::PovLeft(v) => Some((Buttons::PovLeft, v)),
-                Event::PovRight(v) => Some((Buttons::PovRight, v)),
-                Event::MenuL(v) => Some((Buttons::MenuL, v)),
-                Event::MenuR(v) => Some((Buttons::MenuR, v)),
-                Event::ActionH(v) => Some((Buttons::ActionH, v)),
-                Event::ActionV(v) => Some((Buttons::ActionV, v)),
-                Event::ActionB(v) => Some((Buttons::ActionB, v)),
-                Event::ActionA(v) => Some((Buttons::ActionA, v)),
+                Event::BumperL(v) => Some((Button::BumperL, v)),
+                Event::BumperR(v) => Some((Button::BumperR, v)),
+                Event::PovDown(v) => Some((Button::PovDown, v)),
+                Event::PovUp(v) => Some((Button::PovUp, v)),
+                Event::PovLeft(v) => Some((Button::PovLeft, v)),
+                Event::PovRight(v) => Some((Button::PovRight, v)),
+                Event::MenuL(v) => Some((Button::MenuL, v)),
+                Event::MenuR(v) => Some((Button::MenuR, v)),
+                Event::ActionH(v) => Some((Button::ActionH, v)),
+                Event::ActionV(v) => Some((Button::ActionV, v)),
+                Event::ActionB(v) => Some((Button::ActionB, v)),
+                Event::ActionA(v) => Some((Button::ActionA, v)),
                 // JoyZ and CamZ are the two triggers, but they're joysticks
                 _ => None,
             } {

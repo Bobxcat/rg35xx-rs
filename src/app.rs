@@ -5,12 +5,12 @@ use palette::LinSrgb;
 use rusttype::{point, Scale};
 
 #[derive(Default, Clone, Copy)]
-pub struct Button {
+pub struct ButtonState {
     pressed: bool,
     previous: bool,
 }
 
-impl Button {
+impl ButtonState {
     fn pressed(&self) -> bool {
         self.pressed
     }
@@ -29,7 +29,7 @@ impl Button {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Enum, Sequence)]
-pub enum Buttons {
+pub enum Button {
     PovDown,
     PovUp,
     PovLeft,
@@ -46,33 +46,33 @@ pub enum Buttons {
 
 #[derive(Default, Clone)]
 pub struct Input {
-    buttons: EnumMap<Buttons, Button>,
+    buttons: EnumMap<Button, ButtonState>,
 }
 
 impl Input {
     pub fn update(&mut self) {
-        for button in all::<Buttons>() {
+        for button in all::<Button>() {
             self.buttons[button].previous = self.buttons[button].pressed;
         }
     }
 
-    pub fn event(&mut self, button: Buttons, value: bool) {
+    pub fn event(&mut self, button: Button, value: bool) {
         self.buttons[button].pressed = value;
     }
 
-    pub fn pressed(&self, button: Buttons) -> bool {
+    pub fn pressed(&self, button: Button) -> bool {
         self.buttons[button].pressed()
     }
 
-    pub fn just_pressed(&self, button: Buttons) -> bool {
+    pub fn just_pressed(&self, button: Button) -> bool {
         self.buttons[button].just_pressed()
     }
 
-    pub fn just_released(&self, button: Buttons) -> bool {
+    pub fn just_released(&self, button: Button) -> bool {
         self.buttons[button].just_released()
     }
 
-    pub fn just_changed(&self, button: Buttons) -> bool {
+    pub fn just_changed(&self, button: Button) -> bool {
         self.buttons[button].just_changed()
     }
 }

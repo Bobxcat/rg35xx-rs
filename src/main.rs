@@ -2,14 +2,14 @@ use clap::Parser;
 use enum_iterator::all;
 use palette::LinSrgb;
 
-use rg35xx::app::{App, Buttons, Frame, Input};
+use rg35xx::app::{App, Button, Frame, Input};
 
 struct InputTestApp;
 
 impl App for InputTestApp {
     fn update(&mut self, input: &Input, frame: &mut Frame) {
         frame.fill_rect(32, 32, 32, 32, LinSrgb::new(255, 255, 0));
-        for (i, button) in all::<Buttons>().enumerate() {
+        for (i, button) in all::<Button>().enumerate() {
             if input.just_pressed(button) {
                 frame.fill_rect(0, i * 32, 32, 32, LinSrgb::new(255, 0, 0));
             }

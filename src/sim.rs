@@ -8,7 +8,7 @@ use winit::{
 };
 use winit::{event::WindowEvent, keyboard::KeyCode};
 
-use crate::app::{Buttons, Frame, Input};
+use crate::app::{Button, Frame, Input};
 
 struct App<A> {
     app: A,
@@ -99,18 +99,18 @@ impl<A: crate::app::App> ApplicationHandler for App<A> {
             }
             WindowEvent::KeyboardInput { event, .. } => {
                 if let Some(button) = match event.physical_key {
-                    PhysicalKey::Code(KeyCode::KeyA) => Some(Buttons::PovLeft),
-                    PhysicalKey::Code(KeyCode::KeyS) => Some(Buttons::PovDown),
-                    PhysicalKey::Code(KeyCode::KeyD) => Some(Buttons::PovRight),
-                    PhysicalKey::Code(KeyCode::KeyW) => Some(Buttons::PovUp),
-                    PhysicalKey::Code(KeyCode::Numpad4) => Some(Buttons::ActionV),
-                    PhysicalKey::Code(KeyCode::Numpad2) => Some(Buttons::ActionB),
-                    PhysicalKey::Code(KeyCode::Numpad6) => Some(Buttons::ActionA),
-                    PhysicalKey::Code(KeyCode::Numpad8) => Some(Buttons::ActionH),
-                    PhysicalKey::Code(KeyCode::Space) => Some(Buttons::BumperL),
-                    PhysicalKey::Code(KeyCode::Numpad0) => Some(Buttons::BumperR),
-                    PhysicalKey::Code(KeyCode::Period) => Some(Buttons::MenuR),
-                    PhysicalKey::Code(KeyCode::Comma) => Some(Buttons::MenuL),
+                    PhysicalKey::Code(KeyCode::KeyA) => Some(Button::PovLeft),
+                    PhysicalKey::Code(KeyCode::KeyS) => Some(Button::PovDown),
+                    PhysicalKey::Code(KeyCode::KeyD) => Some(Button::PovRight),
+                    PhysicalKey::Code(KeyCode::KeyW) => Some(Button::PovUp),
+                    PhysicalKey::Code(KeyCode::Numpad4) => Some(Button::ActionV),
+                    PhysicalKey::Code(KeyCode::Numpad2) => Some(Button::ActionB),
+                    PhysicalKey::Code(KeyCode::Numpad6) => Some(Button::ActionA),
+                    PhysicalKey::Code(KeyCode::Numpad8) => Some(Button::ActionH),
+                    PhysicalKey::Code(KeyCode::Space) => Some(Button::BumperL),
+                    PhysicalKey::Code(KeyCode::Numpad0) => Some(Button::BumperR),
+                    PhysicalKey::Code(KeyCode::Period) => Some(Button::MenuR),
+                    PhysicalKey::Code(KeyCode::Comma) => Some(Button::MenuL),
                     _ => None,
                 } {
                     self.input
