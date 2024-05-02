@@ -6,7 +6,7 @@ use std::{
 use palette::LinSrgb;
 use rand::{distributions::Uniform, prelude::*};
 
-use crate::app::{App, Buttons};
+use crate::app::{App, Button};
 
 const BLOCK_WIDTH: usize = 10;
 const BLOCK_HEIGHT: usize = 10;
@@ -157,10 +157,10 @@ impl App for SnakeApp {
         if let Some(state) = self.state.as_mut() {
             // Handle any input
             for (button, dir) in [
-                (Buttons::PovDown, Direction::Down),
-                (Buttons::PovUp, Direction::Up),
-                (Buttons::PovLeft, Direction::Left),
-                (Buttons::PovRight, Direction::Right),
+                (Button::PovDown, Direction::Down),
+                (Button::PovUp, Direction::Up),
+                (Button::PovLeft, Direction::Left),
+                (Button::PovRight, Direction::Right),
             ] {
                 if input.pressed(button) {
                     state.new_direction = dir;
@@ -212,7 +212,7 @@ impl App for SnakeApp {
                     &format!("GAME OVER - Score: {}", state.snake.len()),
                 );
 
-                if input.just_pressed(Buttons::MenuR) || input.just_pressed(Buttons::MenuL) {
+                if input.just_pressed(Button::MenuR) || input.just_pressed(Button::MenuL) {
                     self.state = None;
                 }
             }
@@ -234,17 +234,17 @@ impl App for SnakeApp {
                 &format!("Difficulty: {}", self.difficulty),
             );
 
-            if input.just_pressed(Buttons::MenuR) {
+            if input.just_pressed(Button::MenuR) {
                 self.state = Some(State::default());
                 self.last_step = Instant::now();
             }
-            if input.just_pressed(Buttons::PovUp) {
+            if input.just_pressed(Button::PovUp) {
                 self.difficulty += 1;
                 if self.difficulty > 1000 {
                     self.difficulty = 1000;
                 }
             }
-            if input.just_pressed(Buttons::PovDown) {
+            if input.just_pressed(Button::PovDown) {
                 self.difficulty -= 1;
                 if self.difficulty < 1 {
                     self.difficulty = 1;

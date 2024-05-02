@@ -1,5 +1,7 @@
 use std::num::NonZeroU32;
 use std::rc::Rc;
+use winit::event_loop::EventLoopBuilder;
+use winit::platform::wayland::EventLoopBuilderExtWayland;
 use winit::window::{Window, WindowId};
 use winit::{application::ApplicationHandler, keyboard::PhysicalKey};
 use winit::{
@@ -8,7 +10,7 @@ use winit::{
 };
 use winit::{event::WindowEvent, keyboard::KeyCode};
 
-use crate::app::{Buttons, Frame, Input};
+use crate::app::{Button, Frame, Input};
 
 struct App<A> {
     app: A,
@@ -99,18 +101,18 @@ impl<A: crate::app::App> ApplicationHandler for App<A> {
             }
             WindowEvent::KeyboardInput { event, .. } => {
                 if let Some(button) = match event.physical_key {
-                    PhysicalKey::Code(KeyCode::KeyA) => Some(Buttons::PovLeft),
-                    PhysicalKey::Code(KeyCode::KeyS) => Some(Buttons::PovDown),
-                    PhysicalKey::Code(KeyCode::KeyD) => Some(Buttons::PovRight),
-                    PhysicalKey::Code(KeyCode::KeyW) => Some(Buttons::PovUp),
-                    PhysicalKey::Code(KeyCode::Numpad4) => Some(Buttons::ActionV),
-                    PhysicalKey::Code(KeyCode::Numpad2) => Some(Buttons::ActionB),
-                    PhysicalKey::Code(KeyCode::Numpad6) => Some(Buttons::ActionA),
-                    PhysicalKey::Code(KeyCode::Numpad8) => Some(Buttons::ActionH),
-                    PhysicalKey::Code(KeyCode::Space) => Some(Buttons::BumperL),
-                    PhysicalKey::Code(KeyCode::Numpad0) => Some(Buttons::BumperR),
-                    PhysicalKey::Code(KeyCode::Period) => Some(Buttons::MenuR),
-                    PhysicalKey::Code(KeyCode::Comma) => Some(Buttons::MenuL),
+                    PhysicalKey::Code(KeyCode::KeyA) => Some(Button::PovLeft),
+                    PhysicalKey::Code(KeyCode::KeyS) => Some(Button::PovDown),
+                    PhysicalKey::Code(KeyCode::KeyD) => Some(Button::PovRight),
+                    PhysicalKey::Code(KeyCode::KeyW) => Some(Button::PovUp),
+                    PhysicalKey::Code(KeyCode::Numpad4) => Some(Button::ActionV),
+                    PhysicalKey::Code(KeyCode::Numpad2) => Some(Button::ActionB),
+                    PhysicalKey::Code(KeyCode::Numpad6) => Some(Button::ActionA),
+                    PhysicalKey::Code(KeyCode::Numpad8) => Some(Button::ActionH),
+                    PhysicalKey::Code(KeyCode::Space) => Some(Button::BumperL),
+                    PhysicalKey::Code(KeyCode::Numpad0) => Some(Button::BumperR),
+                    PhysicalKey::Code(KeyCode::Period) => Some(Button::MenuR),
+                    PhysicalKey::Code(KeyCode::Comma) => Some(Button::MenuL),
                     _ => None,
                 } {
                     self.input
@@ -133,6 +135,28 @@ pub fn run_app(app: impl crate::app::App) {
     // This is ideal for non-game applications that only update in response to user
     // input, and uses significantly less power/CPU time than ControlFlow::Poll.
     event_loop.set_control_flow(ControlFlow::Wait);
+
+    let mut app = App {
+        app,
+        frame_data: vec![0; 640 * 480 * 4],
+        input: Input::default(),
+        window: None,
+        surface: None,
+    };
+    event_loop.run_app(&mut app).unwrap();
+}
+
+/// Run this app using `Wayland`, and allows running the event loop on a separate thread during simulation
+pub fn run_app_wayland(app: impl crate::app::App) {
+    let event_loop = EventLoopBuilder::default()
+        .with_wayland()
+        .with_any_thread(true)
+        .build()
+        .expect("Could not build event loop");
+
+    // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
+    // dispatched any events. This is ideal for games and similar applications.
+    event_loop.set_control_flow(ControlFlow::Poll);
 
     let mut app = App {
         app,

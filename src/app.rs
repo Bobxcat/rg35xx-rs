@@ -4,32 +4,32 @@ use include_dir::{include_dir, Dir};
 use palette::LinSrgb;
 use rusttype::{point, Scale};
 
-#[derive(Default)]
-pub struct Button {
+#[derive(Default, Clone, Copy)]
+pub struct ButtonState {
     pressed: bool,
     previous: bool,
 }
 
-impl Button {
-    fn pressed(&self) -> bool {
+impl ButtonState {
+    pub fn pressed(&self) -> bool {
         self.pressed
     }
 
-    fn just_pressed(&self) -> bool {
+    pub fn just_pressed(&self) -> bool {
         self.pressed && !self.previous
     }
 
-    fn just_released(&self) -> bool {
+    pub fn just_released(&self) -> bool {
         !self.pressed && self.previous
     }
 
-    fn just_changed(&self) -> bool {
+    pub fn just_changed(&self) -> bool {
         self.pressed != self.previous
     }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Enum, Sequence)]
-pub enum Buttons {
+pub enum Button {
     PovDown,
     PovUp,
     PovLeft,
@@ -44,45 +44,49 @@ pub enum Buttons {
     ActionA,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Input {
-    buttons: EnumMap<Buttons, Button>,
+    buttons: EnumMap<Button, ButtonState>,
 }
 
 impl Input {
     pub fn update(&mut self) {
-        for button in all::<Buttons>() {
+        for button in all::<Button>() {
             self.buttons[button].previous = self.buttons[button].pressed;
         }
     }
 
-    pub fn event(&mut self, button: Buttons, value: bool) {
+    pub fn event(&mut self, button: Button, value: bool) {
         self.buttons[button].pressed = value;
     }
 
-    pub fn pressed(&self, button: Buttons) -> bool {
+    pub fn pressed(&self, button: Button) -> bool {
         self.buttons[button].pressed()
     }
 
-    pub fn just_pressed(&self, button: Buttons) -> bool {
+    pub fn just_pressed(&self, button: Button) -> bool {
         self.buttons[button].just_pressed()
     }
 
-    pub fn just_released(&self, button: Buttons) -> bool {
+    pub fn just_released(&self, button: Button) -> bool {
         self.buttons[button].just_released()
     }
 
-    pub fn just_changed(&self, button: Buttons) -> bool {
+    pub fn just_changed(&self, button: Button) -> bool {
         self.buttons[button].just_changed()
+    }
+
+    pub fn get(&self, button: Button) -> ButtonState {
+        self.buttons[button]
     }
 }
 
 static ASSETS: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 pub struct Frame<'a> {
-    pub width: usize,
-    pub height: usize,
-    pub bytespp: usize,
+    pub(crate) width: usize,
+    pub(crate) height: usize,
+    pub(crate) bytespp: usize,
     pub data: &'a mut [u8],
 }
 
@@ -93,6 +97,10 @@ impl<'a> Frame<'a> {
 
     pub fn height(&self) -> usize {
         self.height
+    }
+
+    pub fn bytespp(&self) -> usize {
+        self.bytespp
     }
 
     pub fn put_pixel(&mut self, x: usize, y: usize, color: LinSrgb<u8>) {
