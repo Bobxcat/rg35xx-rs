@@ -11,19 +11,19 @@ pub struct ButtonState {
 }
 
 impl ButtonState {
-    fn pressed(&self) -> bool {
+    pub fn pressed(&self) -> bool {
         self.pressed
     }
 
-    fn just_pressed(&self) -> bool {
+    pub fn just_pressed(&self) -> bool {
         self.pressed && !self.previous
     }
 
-    fn just_released(&self) -> bool {
+    pub fn just_released(&self) -> bool {
         !self.pressed && self.previous
     }
 
-    fn just_changed(&self) -> bool {
+    pub fn just_changed(&self) -> bool {
         self.pressed != self.previous
     }
 }
@@ -74,6 +74,10 @@ impl Input {
 
     pub fn just_changed(&self, button: Button) -> bool {
         self.buttons[button].just_changed()
+    }
+
+    pub fn get(&self, button: Button) -> ButtonState {
+        self.buttons[button]
     }
 }
 
