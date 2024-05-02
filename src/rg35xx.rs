@@ -86,10 +86,6 @@ pub fn run_app(mut app: impl App) {
     let line_length = framebuffer.fix_screen_info.line_length;
     let bytespp = framebuffer.var_screen_info.bits_per_pixel as usize / 8;
 
-    /*println!(
-        "w={} h={} line_length={} bytespp={}",
-        w, h, line_length, bytespp
-    );*/
     println!("{:#?}", framebuffer.var_screen_info);
     println!("{:#?}", framebuffer.fix_screen_info);
 
@@ -102,7 +98,7 @@ pub fn run_app(mut app: impl App) {
     });
 
     let mut input_state = Input::default();
-    let mut is_high_frame = false;
+    let is_high_frame = false;
     let mut frame_data = vec![0; width * height * bytespp];
     let mut frame = Frame {
         width,

@@ -80,9 +80,9 @@ impl Input {
 static ASSETS: Dir = include_dir!("$CARGO_MANIFEST_DIR/assets");
 
 pub struct Frame<'a> {
-    pub width: usize,
-    pub height: usize,
-    pub bytespp: usize,
+    pub(crate) width: usize,
+    pub(crate) height: usize,
+    pub(crate) bytespp: usize,
     pub data: &'a mut [u8],
 }
 
@@ -93,6 +93,10 @@ impl<'a> Frame<'a> {
 
     pub fn height(&self) -> usize {
         self.height
+    }
+
+    pub fn bytespp(&self) -> usize {
+        self.bytespp
     }
 
     pub fn put_pixel(&mut self, x: usize, y: usize, color: LinSrgb<u8>) {
