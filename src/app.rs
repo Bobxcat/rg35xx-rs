@@ -4,7 +4,7 @@ use include_dir::{include_dir, Dir};
 use palette::LinSrgb;
 use rusttype::{point, Scale};
 
-#[derive(Default)]
+#[derive(Default, Clone, Copy)]
 pub struct Button {
     pressed: bool,
     previous: bool,
@@ -44,7 +44,7 @@ pub enum Buttons {
     ActionA,
 }
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Input {
     buttons: EnumMap<Buttons, Button>,
 }
