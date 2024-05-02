@@ -1,6 +1,6 @@
 use palette::LinSrgb;
 
-use crate::app::{App, Buttons};
+use crate::app::{App, Button};
 
 struct MenuEntry {
     name: String,
@@ -46,13 +46,13 @@ impl App for MenuApp {
                 &app.name,
             );
         }
-        if input.just_pressed(Buttons::PovUp) {
+        if input.just_pressed(Button::PovUp) {
             self.current_app = self.current_app.saturating_sub(1);
         }
-        if input.just_pressed(Buttons::PovDown) {
+        if input.just_pressed(Button::PovDown) {
             self.current_app = (self.current_app + 1).min(self.apps.len() - 1);
         }
-        if input.just_pressed(Buttons::ActionA) {
+        if input.just_pressed(Button::ActionA) {
             // Start the app...
             self.app = Some((self.apps[self.current_app].builder)());
         }

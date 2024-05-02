@@ -3,7 +3,7 @@ use std::{collections::HashMap, time::Instant};
 use palette::LinSrgb;
 use rand::prelude::*;
 
-use crate::app::{App, Buttons};
+use crate::app::{App, Button};
 
 static WORDS: &str = include_str!("../assets/words.csv");
 
@@ -151,16 +151,16 @@ impl App for TabooApp {
                     LinSrgb::new(255, 0, 0),
                     "Press START",
                 );
-                if input.just_pressed(Buttons::PovUp) {
+                if input.just_pressed(Button::PovUp) {
                     *players += 1;
                 }
-                if input.just_pressed(Buttons::PovDown) {
+                if input.just_pressed(Button::PovDown) {
                     *players -= 1;
                     if *players < 2 {
                         *players = 2;
                     }
                 }
-                if input.just_pressed(Buttons::MenuR) {
+                if input.just_pressed(Button::MenuR) {
                     *self = Self::InGame {
                         game: GameState::new(*players),
                         turn: TurnState::ReadyingUp,
@@ -212,14 +212,14 @@ impl App for TabooApp {
                             &format!("Team {}: {}", team, game.won_cards.len()),
                         );
                     }
-                    if input.just_pressed(Buttons::ActionA) {
+                    if input.just_pressed(Button::ActionA) {
                         *turn = TurnState::Playing {
                             start_time: Instant::now(),
                             card: game.draw_card(),
                             results: vec![],
                         };
                     }
-                    if input.just_pressed(Buttons::ActionB) {
+                    if input.just_pressed(Button::ActionB) {
                         *self = Self::Menu {
                             players: game.num_players,
                         };
@@ -252,7 +252,7 @@ impl App for TabooApp {
                         LinSrgb::new(255, 255, 255),
                         "B discard, A got card",
                     );
-                    if remaining < 0.0 || input.just_pressed(Buttons::MenuR) {
+                    if remaining < 0.0 || input.just_pressed(Button::MenuR) {
                         let mut cards2 = vec![];
                         std::mem::swap(&mut cards2, results);
                         let showing = cards2.len() - 1;
@@ -260,12 +260,12 @@ impl App for TabooApp {
                             results: cards2,
                             showing,
                         };
-                    } else if input.just_pressed(Buttons::ActionA) {
+                    } else if input.just_pressed(Button::ActionA) {
                         // Guessed the card
                         let mut next_card = game.draw_card();
                         std::mem::swap(&mut next_card, card);
                         results.push((next_card, true));
-                    } else if input.just_pressed(Buttons::ActionB) {
+                    } else if input.just_pressed(Button::ActionB) {
                         // Give up/fail the card
                         let mut next_card = game.draw_card();
                         std::mem::swap(&mut next_card, card);
@@ -318,16 +318,16 @@ impl App for TabooApp {
                         "POV change cards, A to continue",
                     );
 
-                    if input.just_pressed(Buttons::PovRight) {
+                    if input.just_pressed(Button::PovRight) {
                         *showing += 1;
                         if *showing >= results.len() {
                             *showing = results.len() - 1;
                         }
                     }
-                    if input.just_pressed(Buttons::PovLeft) {
+                    if input.just_pressed(Button::PovLeft) {
                         *showing = showing.saturating_sub(1);
                     }
-                    if input.just_pressed(Buttons::ActionA) {
+                    if input.just_pressed(Button::ActionA) {
                         for (card, won) in results.drain(..) {
                             if won {
                                 game.won_cards[*current_turn].push(card);

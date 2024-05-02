@@ -1,5 +1,7 @@
 use std::num::NonZeroU32;
 use std::rc::Rc;
+use winit::event_loop::EventLoopBuilder;
+use winit::platform::wayland::EventLoopBuilderExtWayland;
 use winit::window::{Window, WindowId};
 use winit::{application::ApplicationHandler, keyboard::PhysicalKey};
 use winit::{
@@ -133,6 +135,28 @@ pub fn run_app(app: impl crate::app::App) {
     // This is ideal for non-game applications that only update in response to user
     // input, and uses significantly less power/CPU time than ControlFlow::Poll.
     event_loop.set_control_flow(ControlFlow::Wait);
+
+    let mut app = App {
+        app,
+        frame_data: vec![0; 640 * 480 * 4],
+        input: Input::default(),
+        window: None,
+        surface: None,
+    };
+    event_loop.run_app(&mut app).unwrap();
+}
+
+/// Run this app using `Wayland`, and allows running the event loop on a separate thread during simulation
+pub fn run_app_wayland(app: impl crate::app::App) {
+    let event_loop = EventLoopBuilder::default()
+        .with_wayland()
+        .with_any_thread(true)
+        .build()
+        .expect("Could not build event loop");
+
+    // ControlFlow::Poll continuously runs the event loop, even if the OS hasn't
+    // dispatched any events. This is ideal for games and similar applications.
+    event_loop.set_control_flow(ControlFlow::Poll);
 
     let mut app = App {
         app,
