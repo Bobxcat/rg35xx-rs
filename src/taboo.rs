@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{collections::HashMap, time::Instant};
 
 use palette::LinSrgb;
 use rand::prelude::*;
@@ -35,8 +35,17 @@ impl GameState {
             })
             .collect::<Vec<_>>();
 
-        // TODO: De-dup
         println!("Found {} words", lines.len());
+        let mut cards = HashMap::new();
+        for card in lines.drain(..) {
+            if cards.contains_key(&card.word) {
+                println!("Found duplicate {}!", card.word);
+            } else {
+                cards.insert(card.word.clone(), card);
+            }
+        }
+        let mut lines = cards.into_values().collect::<Vec<_>>();
+        println!("{} words after removing duplicates", lines.len());
 
         let mut rng = rand::thread_rng();
         lines.shuffle(&mut rng);
