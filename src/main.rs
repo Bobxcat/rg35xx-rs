@@ -29,8 +29,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    //let mut app = InputTestApp;
-    let app = rg35xx::snake::SnakeApp::default();
+    let app = rg35xx::make_menu();
     if args.sim {
         rg35xx::sim::run_app(app);
     } else {
