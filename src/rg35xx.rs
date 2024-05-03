@@ -126,8 +126,8 @@ pub fn run_app(mut app: impl App) {
                 Event::PovRight(v) => Some((Button::PovRight, v)),
                 Event::MenuL(v) => Some((Button::MenuL, v)),
                 Event::MenuR(v) => Some((Button::MenuR, v)),
-                Event::ActionH(v) => Some((Button::ActionH, v)),
-                Event::ActionV(v) => Some((Button::ActionV, v)),
+                Event::ActionH(v) => Some((Button::ActionV, v)),
+                Event::ActionV(v) => Some((Button::ActionH, v)),
                 Event::ActionB(v) => Some((Button::ActionB, v)),
                 Event::ActionA(v) => Some((Button::ActionA, v)),
                 // JoyZ and CamZ are the two triggers, but they're joysticks
