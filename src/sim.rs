@@ -100,21 +100,30 @@ impl<A: crate::app::App> ApplicationHandler for App<A> {
                 self.window.as_ref().unwrap().request_redraw();
             }
             WindowEvent::KeyboardInput { event, .. } => {
-                if let Some(button) = match event.physical_key {
-                    PhysicalKey::Code(KeyCode::KeyA) => Some(Button::PovLeft),
-                    PhysicalKey::Code(KeyCode::KeyS) => Some(Button::PovDown),
-                    PhysicalKey::Code(KeyCode::KeyD) => Some(Button::PovRight),
-                    PhysicalKey::Code(KeyCode::KeyW) => Some(Button::PovUp),
-                    PhysicalKey::Code(KeyCode::Numpad4) => Some(Button::ActionV),
-                    PhysicalKey::Code(KeyCode::Numpad2) => Some(Button::ActionB),
-                    PhysicalKey::Code(KeyCode::Numpad6) => Some(Button::ActionA),
-                    PhysicalKey::Code(KeyCode::Numpad8) => Some(Button::ActionH),
-                    PhysicalKey::Code(KeyCode::Space) => Some(Button::BumperL),
-                    PhysicalKey::Code(KeyCode::Numpad0) => Some(Button::BumperR),
-                    PhysicalKey::Code(KeyCode::Period) => Some(Button::MenuR),
-                    PhysicalKey::Code(KeyCode::Comma) => Some(Button::MenuL),
-                    _ => None,
-                } {
+                if let Some(button) =
+                    match event.physical_key {
+                        // Left d-pad
+                        PhysicalKey::Code(KeyCode::KeyA) => Some(Button::PovLeft),
+                        PhysicalKey::Code(KeyCode::KeyS) => Some(Button::PovDown),
+                        PhysicalKey::Code(KeyCode::KeyD) => Some(Button::PovRight),
+                        PhysicalKey::Code(KeyCode::KeyW) => Some(Button::PovUp),
+                        // Right d-pad (the letter keys)
+                        PhysicalKey::Code(KeyCode::Numpad4)
+                        | PhysicalKey::Code(KeyCode::ArrowUp) => Some(Button::ActionV),
+                        PhysicalKey::Code(KeyCode::Numpad2)
+                        | PhysicalKey::Code(KeyCode::ArrowDown) => Some(Button::ActionB),
+                        PhysicalKey::Code(KeyCode::Numpad6)
+                        | PhysicalKey::Code(KeyCode::ArrowRight) => Some(Button::ActionA),
+                        PhysicalKey::Code(KeyCode::Numpad8)
+                        | PhysicalKey::Code(KeyCode::ArrowLeft) => Some(Button::ActionH),
+                        // Other
+                        PhysicalKey::Code(KeyCode::Space) => Some(Button::BumperL),
+                        PhysicalKey::Code(KeyCode::Numpad0) => Some(Button::BumperR),
+                        PhysicalKey::Code(KeyCode::Period) => Some(Button::MenuR),
+                        PhysicalKey::Code(KeyCode::Comma) => Some(Button::MenuL),
+                        _ => None,
+                    }
+                {
                     self.input
                         .event(button, event.state == ElementState::Pressed);
                 }
