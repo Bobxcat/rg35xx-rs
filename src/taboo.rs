@@ -209,7 +209,7 @@ impl App for TabooApp {
                             } else {
                                 LinSrgb::new(255, 0, 0)
                             },
-                            &format!("Team {}: {}", team, game.won_cards.len()),
+                            &format!("Team {}: {}", team, game.won_cards[team].len()),
                         );
                     }
                     if input.just_pressed(Button::ActionA) {
