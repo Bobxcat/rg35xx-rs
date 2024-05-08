@@ -184,6 +184,50 @@ impl<'a> Frame<'a> {
             }
         }
     }
+
+    pub fn context<'b>(&'b mut self) -> GraphicsContext<'b, 'a> {
+        GraphicsContext {
+            x: 0,
+            y: 0,
+            fontsize: 18.0,
+            color: LinSrgb::new(255, 255, 255),
+            frame: self,
+        }
+    }
+}
+
+pub struct GraphicsContext<'a, 'b> {
+    x: usize,
+    y: usize,
+    fontsize: f32,
+    color: LinSrgb<u8>,
+    frame: &'a mut Frame<'b>,
+}
+
+impl<'a, 'b> GraphicsContext<'a, 'b> {
+    pub fn set_fontsize(&mut self, fontsize: f32) {
+        self.fontsize = fontsize;
+    }
+
+    pub fn offset(&mut self, dx: i32, dy: i32) {
+        self.x = self.x.saturating_add_signed(dx as isize);
+        self.y = self.y.saturating_add_signed(dy as isize);
+    }
+
+    pub fn set_color(&mut self, color: LinSrgb<u8>) {
+        self.color = color;
+    }
+
+    pub fn text(&mut self, s: &str) {
+        self.frame.text(
+            "fonts/Ubuntu-B.ttf",
+            self.x,
+            self.y,
+            self.fontsize,
+            self.color,
+            s,
+        );
+    }
 }
 
 pub trait App {
